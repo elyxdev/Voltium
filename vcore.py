@@ -45,7 +45,7 @@ def vbanner():
      ░                                                   {Fore.RESET}
 """)
 
-def send_beacon(ssid, mac, ifacem, refrate, infinite=True):
+def send_beacon(ssid, mac, ifacem, refrate):
     dot11 = Dot11(type=0, subtype=8, addr1="ff:ff:ff:ff:ff:ff", addr2=mac, addr3=mac)
     # ESS+privacy to appear as secured on some devices
     beacon = Dot11Beacon(cap="ESS+privacy")
@@ -53,14 +53,20 @@ def send_beacon(ssid, mac, ifacem, refrate, infinite=True):
     frame = RadioTap()/dot11/beacon/essid
     sendp(frame, inter=refrate, loop=1, iface=ifacem, verbose=0)
 
-# faker.name()
 def spamwifis(n_ap, iface, spmname, refrate):
     faker = Faker()
-    ssids_macs = [
-        (
-        f"{spmname}{i}",
-        faker.mac_address()
-        ) for i in range(int(n_ap)) ]
-
+    ssids_macs = []
+    if type(spmname) == type(""): # si es string
+        ssids_macs = [
+            (
+            f"{spmname} {i}",
+            faker.mac_address()
+            ) for i in range(int(n_ap)) ]
+    else: # si es un array
+        for i in range(int(n_ap)):
+            temporal = (f"{spmname[i]}",
+                        faker.mac_address()
+                        )
+            ssids_macs.append(temporal)
     for ssid, mac in ssids_macs:
         Thread(target=send_beacon, args=(ssid, mac, iface, refrate)).start()
