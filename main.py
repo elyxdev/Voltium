@@ -3,11 +3,8 @@ import os
 import sys
 from scapy.all import *
 
-
 vsetup()
 vbanner()
-
-
 
 def menu():
     try:
@@ -16,7 +13,6 @@ def menu():
         "List all interfaces",
         "Monitor mode settings",
         "Spam access points",
-        "Stop spam",
         "Clear screen",
         "Exit"])
 
@@ -86,25 +82,14 @@ def menu():
             else:
                 ref_rate = int(ref_rate) / 1000
             spamwifis(apsnum, ifacenam, vadeu, ref_rate)
-
-        elif val0 == "3": # Detener spam
+        elif val0 == "3": # limpiar pantalla
             cls()
-            os.system("sudo airmon-ng")
-            print("Starting to scan nets...")
-            kdlf = input("Iface name > ")
-            cls()
-            print("Ctrl+C to proceed.")
-            os.system(f"sudo airodump-ng {kdlf}")
-            
-        elif val0 == "4": # limpiar pantalla
-            cls()
-        elif val0 == "5": # salir
+        elif val0 == "4": # salir
             print("Problems exiting? Try Ctrl+C")
             sys.exit(0)
     except Exception as e:
         print(f"{Fore.RED}Exiting...{Fore.RESET}")
         print(e)
         sys.exit(0)
-
 while True:
     menu()
