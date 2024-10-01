@@ -4,11 +4,11 @@ import sys
 from scapy.all import *
 
 vsetup()
-vbanner()
 
 def menu():
     try:
         cls()
+        vbanner()
         val0 = smenu("Menu", [
         "List all interfaces",
         "Monitor mode settings",
